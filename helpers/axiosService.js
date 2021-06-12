@@ -14,7 +14,7 @@ const tunnelAgent = tunnel.httpsOverHttp({
 axios.defaults.baseURL = baseUrl;
 // axios.defaults.httpsAgent = tunnelAgent;
 // axios.defaults.jar = cookiejar;
-
+// 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2; rv:10.0.1) Gecko/20100101 Firefox/10.0.1';
 const AxiosService = async (url) => {
   return new Promise(async (resolve, reject) => {
     const _url = url == null?url:encodeURI(url);
