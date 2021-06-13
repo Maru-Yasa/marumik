@@ -67,7 +67,7 @@
             </div>
           </div>
             <% if (manga !== undefined) { %>
-                <% manga.mangaBaru.manga_list.forEach(e => { %>
+                <% manga.mangaBaru.forEach(e => { %>
     
                   <div class="row col-md-7 col-lg-4 m-2 shadow rounded" style="margin: 0px;padding: 0;">
                     <div class="col-6 col-md-5" style="padding: 0px;">
@@ -130,7 +130,7 @@
             </div>
           </div>
           <div class="row flex-row flex-nowrap outer border rounded shadow">
-            <% manga.manhuaBaru.manga_list.forEach(e => { %>
+            <% manga.manhuaBaru.forEach(e => { %>
              <div class="col-3 m-2">
                <div class="card d-grid m-1">
                  <img src="<%= e.thumb %> " class="card-img-top" style="width: 203px;height: 127px;margin-right: 0px !important;" alt="">
@@ -183,7 +183,7 @@
       </div>
     </div>
     <div class="row flex-row flex-nowrap outer border rounded shadow">
-      <% manga.manhwaBaru.manga_list.forEach(e => { %>
+      <% manga.manhwaBaru.forEach(e => { %>
        <div class="col-3 m-2">
          <div class="card d-grid m-1">
            <img src="<%= e.thumb %> " class="card-img-top" style="width: 203px;height: 127px;margin-right: 0px !important;" alt="">

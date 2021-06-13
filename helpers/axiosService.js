@@ -3,6 +3,7 @@ const tunnel = require("tunnel");
 const baseUrl = require("../constants/urls");
 const axiosCookieJarSupport = require("axios-cookiejar-support").default;
 const tough = require("tough-cookie");
+let randomUserAgent = require('random-user-agent')
 axiosCookieJarSupport(axios);
 const cookiejar = new tough.CookieJar();
 const tunnelAgent = tunnel.httpsOverHttp({
@@ -19,7 +20,11 @@ const AxiosService = async (url) => {
   return new Promise(async (resolve, reject) => {
     const _url = url == null?url:encodeURI(url);
     try {
-      const response = await axios.get(_url);
+      const response = await axios.get(_url,{
+        headers:{
+          'User-Agent':randomUserAgent('desktop')
+        }
+      });
       if (response.status === 200) {
         return resolve(response);
       }

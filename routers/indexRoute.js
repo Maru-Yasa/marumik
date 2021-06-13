@@ -5,13 +5,8 @@ require('dotenv').config()
 
 API = process.env.API_URL
 
-async function getLastestManga(page=1) {
-    var r = undefined
-    await fetch(`${API}manga/page/${page}`)
-        .then(res => res.json())
-        .then((json) => {
-            r = json
-        });
+async function getLastestManga(page) {
+    var r = await myFunc.getMangaTerbaru(page)
     return r;
 }
 
@@ -21,62 +16,50 @@ async function getListManga(page,jenis) {
         await fetch(`manga/popular/1`)
             .then(res => res.json())
             .then((json) => {
-                console.log(json)
                 r = json
         });
     }else{
-        await fetch(`${API}${jenis}/${page}`)
-            .then(res => res.json())
-            .then((json) => {
-                r = json
-            });
-        }
-        
+        r = await myFunc.getManhwaManhua(page,jenis)
+    }  
     return r;
 }
 
 async function getDetailManga(endpoint) {
-    var r = undefined
-    await fetch(`${API}manga/detail/${endpoint}`)
-        .then(res => res.json())
-        .then((json) => {
-            r = json
-        });
+    var r = await myFunc.getDetailKomik(endpoint)
     return r;
 }
 
 async function searchManga(query) {
-    var r = undefined
-    await fetch(`${API}search/${query}`)
-        .then(res => res.json())
-        .then((json) => {
-            r = json
-        });
+    var r = await myFunc.searchManga(query)
     return r;
 }
 
-async function getChapter(endpoint) {
-    var r = undefined
-    await fetch(`${API}chapter/${endpoint}`)
-        .then(res => res.json())
-        .then((json) => {
-            r = json
-        });
-    return r;
-}
+// async function getChapter(endpoint) {
+//     var r = undefined
+//     await fetch(`${API}chapter/${endpoint}`)
+//         .then(res => res.json())
+//         .then((json) => {
+//             r = json
+//         });
+//     return r;
+// }
 
 
 router.route('/')
     .get(async(req,res) => {
+        mangaBaru = await myFunc.getMangaTerbaru(1)
+        manhuaBaru = await myFunc.getManhwaManhua(1,'manhua')
+        manhwaBaru = await myFunc.getManhwaManhua(1,'manhwa')
         data = {
             // mangaBaru   :await myFunc.getLastestManga(1),
-            mangaBaru   :await getLastestManga(1),
-            manhuaBaru  :await getListManga(1,'manhua'),
-            manhwaBaru  :await getListManga(1,'manhwa')
+            mangaBaru   :mangaBaru,
+            manhuaBaru  :manhuaBaru,
+            manhwaBaru  :manhwaBaru
         }            
         // dataMangaBaru = await getLastestManga(1)
         // dataManhua = await getListManga(1,'manhua')
         // dataManhwa = await getListManga(1,'manhua')
+        // console.log(data.magaBaru);
         res.render('index',manga=data)
         // res.send(data)
     })
@@ -85,7 +68,6 @@ router.route('/komik')
     .get(async(req,res) => {
         let query = req.query
         let body  = req.body
-        console.log(query)
         if(query.jenis && query.page || query.cari){
             if(query.jenis === 'terbaru'){
                 data = [await getLastestManga(query.page), parseInt(query.page),query.jenis]
@@ -156,25 +138,6 @@ router.route('/komik/detail/:endpoint')
     })
 
 router.route('/komik/baca/:endpoint')
-    // .get(async(req,res) => {
-    //     let param = req.params
-    //     let endpoint = encodeURI(param.endpoint)
-    //     if (param.endpoint) {
-    //         tmp = await myFunc.getChapter(param.endpoint)
-    //         lanjut = undefined
-    //         if (tmp.on_chapter < tmp.max_chapter) {
-    //             lanjut = param.endpoint.replace(`${tmp.on_chapter}`,tmp.on_chapter + 1)
-    //         }else{
-    //             lanjut = param.endpoint
-    //         }
-    //         data = {
-    //             chapter : tmp,
-    //             lanjut : lanjut
-    //         }
-    //         res.render('chapter', data=data)
-    //     }
-    // })
-    
         .get(async (req,res) => {
             let param = req.params;
             endpoint = encodeURI(param.endpoint + '/')
@@ -200,6 +163,7 @@ router.route('/komik/baca/:endpoint')
             // console.log(chapterList)
             // console.log(chapterIndex,detailEndpoint,endpoint)
             // console.log(lanjut,sebelum,chapterIndex)
+            // console.log(data.sebelum);
             res.render('chapter',data=data)
         })
 

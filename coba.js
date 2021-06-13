@@ -32,6 +32,8 @@ async function main() {
               obj.chapter = chapter;
             });
             console.log(obj)
+            let randomUserAgent = require('random-user-agent')
+            console.log(randomUserAgent('desktop'))
 
             // $('#Baca_Komik').find("img").each((idx,el) => {
             //     img = $(el).attr('src')

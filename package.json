@@ -22,6 +22,7 @@
     "got": "^11.5.2",
     "helmet": "^3.23.3",
     "node-fetch": "^2.6.1",
+    "random-user-agent": "^1.0.0",
     "tough-cookie": "^4.0.0",
     "tunnel": "0.0.6"
   }

@@ -11,28 +11,25 @@ app.use(express.urlencoded({ extended: true }))
 app.set('view engine','ejs')
 app.use(cors());
 app.use(helmet());
-app.use("/api", manga);
+// app.use("/api", manga);
 app.use(express.static("./public"));
-app.use("/api/chapter", chapter);
+// app.use("/api/chapter", chapter);
 app.use('/',indexRoute)
-app.use("/api", (req, res) => {
-  res.send({
-    status: true,
-    message:
-      "For more info, check out https://github.com/febryardiansyah/manga-api",
-    find_me_on: {
-      facebook: "https://www.facebook.com/febry.ardiansyah.792/",
-      instagram: "https://instagram.com/febry_ardiansyah24",
-      github: "https://github.com/febryardiansyah/manga-api",
-    },
-  });
-});
-// app.use("*", (req, res) => {
-//   res.status(404).json({
-//     success: false,
-//     message: "api path not found",
+// app.use("/api", (req, res) => {
+//   res.send({
+//     status: true,
+//     message:
+//       "For more info, check out https://github.com/febryardiansyah/manga-api",
+//     find_me_on: {
+//       facebook: "https://www.facebook.com/febry.ardiansyah.792/",
+//       instagram: "https://instagram.com/febry_ardiansyah24",
+//       github: "https://github.com/febryardiansyah/manga-api",
+//     },
 //   });
 // });
+app.use("*", (req, res) => {
+  res.status(404).render('404')
+});
 
 
 
