@@ -61,6 +61,7 @@ module.exports = {
         }
     } catch (error) {
         obj.error = error
+        return {}
     }
     return chapter;
     },
@@ -111,7 +112,7 @@ module.exports = {
           });
           return manga_list;
         }
-        return undefined
+        return []
       }catch (err) {
         return err
       }
@@ -164,7 +165,7 @@ module.exports = {
         return manga_list
       } catch (error) {
         console.log(error);
-        return undefined
+        return []
       }
     },
 
@@ -244,7 +245,7 @@ module.exports = {
     
       } catch (error) {
         console.log(error);
-        return undefined
+        return {}
       }
     },
 
@@ -286,7 +287,7 @@ module.exports = {
         return manga_list
       } catch (error) {
         console.log(error)
-        return undefined
+        return []
       }
     }
 
