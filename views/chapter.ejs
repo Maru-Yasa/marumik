@@ -18,16 +18,14 @@
 
 <!-- loading area -->
 
-<%- include('./loadingChapter.ejs') %> 
-
 
 <!-- manga area -->
-<% if (data.chapter.judul) { %>
+<% if (data.chapter.chapter_image) { %>
     <div class="container-fluid">
         <div class="row justify-content-center bg-dark">
-            <% data.chapter.img_link.forEach(e => { %>
+            <% data.chapter.chapter_image.forEach(e => { %>
              <div class="col-10 mx-3 text-center">
-                 <img class="img-fluid" src="<%= e.image_link %> " id="<%= e.id %> " alt="">
+                 <img class="img-fluid" src="<%= e.chapter_image_link %> " id="<%= e.image_number %> " alt="">
              </div>
             <% }) %>
             <div class="d-flex mt-3 mb-5 col-10 fw-bold fs-md-5 fs-6 text-light justify-content-between" id="bawah">

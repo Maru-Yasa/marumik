@@ -1,12 +1,12 @@
 const router = require('express').Router()
 const fetch = require('node-fetch')
-const myFunc = require('../function/api')
+const myFunc = require('../function/apiNotLocal')
 require('dotenv').config()
 
 API = process.env.API_URL
 
-async function getLastestManga(page) {
-    var r = await myFunc.getMangaTerbaru(page)
+async function getLatestManga(page) {
+    var r = await myFunc.getLatestManga(page)
     return r;
 }
 
@@ -19,13 +19,13 @@ async function getListManga(page,jenis) {
                 r = json
         });
     }else{
-        r = await myFunc.getManhwaManhua(page,jenis)
+        r = await myFunc.getLatestManhwaManhua(page,jenis)
     }  
     return r;
 }
 
 async function getDetailManga(endpoint) {
-    var r = await myFunc.getDetailKomik(endpoint)
+    var r = await myFunc.getDetailManga(endpoint)
     return r;
 }
 
@@ -47,9 +47,9 @@ async function searchManga(query) {
 
 router.route('/')
     .get(async(req,res) => {
-        mangaBaru = await myFunc.getMangaTerbaru(1)
-        manhuaBaru = await myFunc.getManhwaManhua(1,'manhua')
-        manhwaBaru = await myFunc.getManhwaManhua(1,'manhwa')
+        mangaBaru = await myFunc.getLatestManga(1)
+        manhuaBaru = await myFunc.getLatestManhwaManhua(1,'manhua')
+        manhwaBaru = await myFunc.getLatestManhwaManhua(1,'manhwa')
         data = {
             // mangaBaru   :await myFunc.getLastestManga(1),
             mangaBaru   :mangaBaru,
@@ -70,7 +70,7 @@ router.route('/komik')
         let body  = req.body
         if(query.jenis && query.page || query.cari){
             if(query.jenis === 'terbaru'){
-                data = [await getLastestManga(query.page), parseInt(query.page),query.jenis]
+                data = [await myfunc.getLatestManga(query.page), parseInt(query.page),query.jenis]
                 console.log('masuk')
                 return res.render('komik', manga=data)
             }
@@ -114,7 +114,7 @@ router.route('/komik/:jenis')
         }else{
             if (query.page) {
                 data =[
-                    await getLastestManga(query.page),
+                    await getLatestManga(query.page),
                     parseInt(query.page),
                     param.jenis
                 ]
@@ -130,9 +130,7 @@ router.route('/komik/detail/:endpoint')
         let param = req.params
         let endpoint = encodeURI(param.endpoint)
         if (param.endpoint) {
-            data = {
-                detailManga : await getDetailManga(endpoint)
-            }
+            data = await getDetailManga(endpoint)
             res.render('detail',data=data)
         }
     })
@@ -141,14 +139,14 @@ router.route('/komik/baca/:endpoint')
         .get(async (req,res) => {
             let param = req.params;
             endpoint = encodeURI(param.endpoint + '/')
-            let lanjut,sebelum,chapter
+            let lanjut,sebelum,chapter = null
             if (param.endpoint) {
                 chapter = await myFunc.getChapter(param.endpoint)
-                detailEndpoint = encodeURI(chapter.judul.split('Chapter')[0].toLowerCase().split(' ').join('-').replace(/-$/, ''))
+                detailEndpoint = encodeURI(param.endpoint.split('-chapter')[0].toLowerCase())
                 chapterList = await myFunc.getChapterList(detailEndpoint)
                 chapterIndex = chapterList.indexOf(endpoint.toLowerCase())
                 if (chapterIndex === 0) {
-                    sebelum = await chapterList[parseInt(chapterIndex + 1)]
+                    sebelum = await chapterList[chapterIndex + 1]
                 }else if(chapterIndex > 0 || chapterIndex === 1){
                     lanjut = await chapterList[parseInt(chapterIndex - 1)]
                     sebelum = await chapterList[parseInt(chapterIndex + 1)]
@@ -163,7 +161,7 @@ router.route('/komik/baca/:endpoint')
             // console.log(chapterList)
             // console.log(chapterIndex,detailEndpoint,endpoint)
             // console.log(lanjut,sebelum,chapterIndex)
-            // console.log(data.sebelum);
+            // console.log(data.lanjut);
             res.render('chapter',data=data)
         })
 

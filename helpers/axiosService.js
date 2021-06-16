@@ -1,17 +1,14 @@
-const axios = require("axios")
+const axios = require("axios").default
 const tunnel = require("tunnel");
 const baseUrl = require("../constants/urls");
+const HttpsProxyAgent = require('https-proxy-agent');
 const axiosCookieJarSupport = require("axios-cookiejar-support").default;
 const tough = require("tough-cookie");
 let randomUserAgent = require('random-user-agent')
 axiosCookieJarSupport(axios);
 const cookiejar = new tough.CookieJar();
-// const tunnelAgent = tunnel.httpsOverHttp({
-//   proxy: {
-//     host: "103.106.219.121",
-//     port: 8080,
-//   },
-// });
+
+
 axios.defaults.baseURL = baseUrl;
 // axios.defaults.httpsAgent = tunnelAgent;
 axios.defaults.jar = cookiejar;
@@ -30,16 +27,6 @@ const AxiosService = async (url) => {
     }
   });
 };
-
-// const AxiosService = async (url) => {
-//   try {
-//     var response = await axios.get(url);
-//     return response
-//   } catch (error) {
-//     console.log(error)
-//     return undefined
-//   }
-// }
 
 
 
